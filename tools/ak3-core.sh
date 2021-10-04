@@ -326,6 +326,11 @@ flash_boot() {
             echo "Attempting kernel unpack with busybox $comp..." >&2;
             $comp -dc $kernel > kernel;
           fi;
+          # Remove Samsung RKP
+          $bin/magiskboot hexpatch kernel 49010054011440B93FA00F71E9000054010840B93FA00F7189000054001840B91FA00F7188010054 A1020054011440B93FA00F7140020054010840B93FA00F71E0010054001840B91FA00F7181010054;
+          # Remove Samsung defex
+          $bin/magiskboot hexpatch kernel 821B8012 E2FF8F12;
+          # Force kernel to load rootfs
           $bin/magiskboot hexpatch kernel 736B69705F696E697472616D667300 77616E745F696E697472616D667300;
           if [ "$(file_getprop $home/anykernel.sh do.systemless)" == 1 ]; then
             strings kernel | grep -E 'Linux version.*#' > $home/vertmp;
